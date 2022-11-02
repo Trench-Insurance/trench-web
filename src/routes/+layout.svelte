@@ -1,30 +1,47 @@
 <script>
-  import "../app.postcss";
+  import Dashboard from "$lib/components/dashboard.svelte";
+import "../app.postcss";
   
-  let toggleApp = false;
+  let toggleApp = true;
+  let metamask = true;
+
+  const connectWallet = () => {
+    metamask = true;
+    toggleApp = true;
+  }
 </script>
 
 <button on:click={() => toggleApp = !toggleApp} class=" {toggleApp ? "hidden" : "fixed"} top-[50%] left-[50%] bg-white h-20 rounded-r-full w-10 text-neutral-700 flex items-center text-xl">►</button>
 <div class="flex flex-row w-full h-screen">
  <div class="{toggleApp ? "flex-1" : "w-1/2"} bg-white flex flex-col h-full">
-  <nav class="flex h-10 w-full px-8 items-end sticky"><img src="/trenchlogo.svg" width="32" height="32" alt=""></nav>
+  <nav class="flex h-10 w-full px-8 items-end justify-between sticky"><img src="/trenchlogo.svg" width="32" height="32" alt=""> {#if metamask} <button class="bg-green-700 text-white rounded-md px-5">0x....</button> {/if}</nav>
   <div class="w-full flex-1">
     <div class="h-full flex justify-center items-center">
-      <div class="outline px-[15%] pb-4 outline-neutral-200 rounded-md flex flex-col justify-center items-center">
+      {#if !metamask}
+      <button on:click={connectWallet} class="outline px-[15%] pb-4 outline-neutral-200 rounded-md flex flex-col justify-center items-center">
         <img src="/MetaMask_Fox.png" width="200" height="200" alt="">
         <p class="text-neutral-600 font-semibold">Connect to Metamask</p>
-      </div>
+      </button>
+      {:else}
+      {#if toggleApp}
+      <Dashboard></Dashboard>
+      {:else}
+      <img class="pr-8" src="/skeleton.png" alt="">
+      {/if}
+      {/if}
     </div>
   </div>
   
  </div>
- <div class="{toggleApp ? "w-[30px]" : "w-1/2"} bg-neutral-100 flex flex-col h-full">
+ <div class="{toggleApp ? "w-[40px]" : "w-1/2"} bg-neutral-100 flex flex-col h-full">
   {#if toggleApp}
-  <p>h</p>
+  <button on:click={() => toggleApp = !toggleApp} class="flex justify-center w-full mt-2">
+    <img src="https://img.icons8.com/ios-filled/100/000000/menu-rounded.png" width="24" height="24"/>
+  </button>
   {:else}
   <nav class="sticky gap-6 flex items-end text-neutral-500 justify-end px-8 h-10 w-full">
     <a href="/">Home</a>
-    <a href="/">About</a>
+    <a href="/about">About</a>
     <a href="/">How to</a>
     <!-- <a href="/">Community</a> -->
   </nav>
