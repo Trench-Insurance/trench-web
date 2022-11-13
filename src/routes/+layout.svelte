@@ -10,15 +10,19 @@ import "../app.postcss";
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
 
-    $metamask = provider.getSigner();
+    $metamask = await provider.getSigner().getAddress();
     toggleApp = true;
+  }
+
+  $:{
+    console.log($metamask);
   }
 </script>
 
 <button on:click={() => toggleApp = !toggleApp} class=" {toggleApp ? "hidden" : "fixed"} top-[50%] left-[50%] bg-white h-20 rounded-r-full w-10 text-neutral-700 flex items-center text-xl">►</button>
 <div class="flex flex-row w-full h-screen">
  <div class="{toggleApp ? "flex-1" : "w-1/2"} bg-white flex flex-col h-full">
-  <nav class="flex h-10 w-full px-8 items-end justify-between sticky"><img src="/trenchlogo.svg" width="32" height="32" alt=""> {#if $metamask} <button class="bg-green-700 text-white rounded-md px-5">{$metamask}</button> {/if}</nav>
+  <nav class="flex h-10 w-full px-8 items-end justify-between sticky"><img src="/trenchlogo.svg" width="32" height="32" alt=""> {#if $metamask} <button class="bg-green-700 text-white rounded-md px-5">{$metamask.substring(0, 10)}...</button> {/if}</nav>
   <div class="w-full flex-1">
     <div class="h-full flex justify-center items-center">
       {#if !$metamask}
