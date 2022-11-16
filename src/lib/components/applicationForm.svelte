@@ -1,36 +1,59 @@
+<script>
+    import { metamask } from "$lib/stores/metamaskStore";
+
+    let iValue = 0;
+    let token = "";
+    let basePremium = 175;
+    let selectedInflation = 125;
+    let selectedMonth = 3;
+
+   
+    const terms = [3, 6, 12];
+</script>
+
 <div class="flex flex-col gap-4 h-full">
     <div>
-    <p>Insured Asset Value</p>
-    <input type="number">
-    </div>
-    <div>
-    <p>Insurance Period</p>
-    <input type="date">
+        <h3>Insured Asset Value</h3>
+        <input bind:value={iValue} type="number" />
     </div>
 
     <div>
-        <p>Select Token</p>
-        <input type="text">
-    </div>
-    
-    <div>
-        <p>Premium</p>
-        <input type="text">
+        <h3>Select Token</h3>
+        <select bind:value={token}>
+            <option value="TPDbusqyVzJhUKmwAn94JVXLNo7ezZoutb">USDD</option>
+        </select>
     </div>
 
     <div>
-        <p>Premium</p>
-        <input type="text">
+        <h3>Base Premium Rate</h3>
+        <input disabled={true} value={175 / 100} type="number" />
     </div>
-    <div class="flex-grow"></div>
-    <button class="bg-green-800 text-white rounded-md py-2">Submit</button>
+
+    <div>
+        <h3>Available Packages</h3>
+        <div class="flex flex-col rounded-xl bg-neutral-200">
+            {#each terms as term}
+                <div class=" h-full flex flex-row w-full px-2 py-2">
+                    <p>{term} Months</p>
+                    <p>Inflation Rate</p>
+                    <p>Premium Rate</p>
+                </div>
+            {/each}
+        </div>
+    </div>
+    <div class="flex-grow" />
+    <button class="bg-blue-700 text-white rounded-md py-2">Submit</button>
 </div>
 
 <style>
     p {
+        font-size: small;
+    }
+    h3 {
         font-weight: 600;
     }
-    input{
+    input,
+    select {
         width: 100%;
         border-radius: 6px;
         box-sizing: border-box;
