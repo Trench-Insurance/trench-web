@@ -1,8 +1,7 @@
 <script>
-    import { metamask } from "$lib/stores/metamaskStore";
+    import { wallet } from "$lib/stores/walletStore";
 
     let iValue = 0;
-    let token = "";
     let basePremium = 175;
     let selectedInflation = 125;
     let selectedMonth = 3;
@@ -10,6 +9,7 @@
    
     const terms = [3, 6, 12];
 </script>
+
 
 <div class="flex flex-col gap-4 h-full">
     <div>
@@ -19,8 +19,8 @@
 
     <div>
         <h3>Select Token</h3>
-        <select bind:value={token}>
-            <option value="TPDbusqyVzJhUKmwAn94JVXLNo7ezZoutb">USDD</option>
+        <select>
+            <option value="NEAR">NEAR</option>
         </select>
     </div>
 

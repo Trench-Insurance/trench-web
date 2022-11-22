@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "buildnear": "./build.sh",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
@@ -19,12 +20,17 @@
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.7",
     "tailwindcss": "^3.1.5",
+    "ts-morph": "^16.0.0",
     "tslib": "^2.3.1",
     "typescript": "^4.7.4",
     "vite": "^3.1.0"
   },
   "type": "module",
   "dependencies": {
-    "ethers": "^5.7.2"
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+    "buffer": "^6.0.3",
+    "ethers": "^5.7.2",
+    "near-api-js": "^0.44.2",
+    "near-sdk-js": "^0.6.0"
   }
 }

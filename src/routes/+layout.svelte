@@ -1,28 +1,37 @@
 <script>
   import Dashboard from "$lib/components/dashboard.svelte";
-  import { metamask } from "$lib/stores/metamaskStore";
+
+  import * as buffer from "buffer";
+  import { wallet, selector, account } from "$lib/stores/walletStore";
   import "../app.postcss";
-  //Contract Address = TFYGDDkNGLrnwyUWYVhnkaSXv14w7zzAmL
+  import process from "process";
+  import {initContract} from "$lib/js/caller"
+  import { onMount } from "svelte";
+
   let toggleApp = true;
 
-  const connectWallet = async () => {
-    let tronWeb;
-    if (window.tronLink.ready) {
-      tronWeb = tronLink.tronWeb;
-    } else {
-      const res = await tronLink.request({ method: "tron_requestAccounts" });
-      if (res.code === 200) {
-        tronWeb = tronLink.tronWeb;
-      }
-    }
-    if(tronWeb) {
-      toggleApp = true;
-    $metamask = window.tronWeb.defaultAddress.base58;
-    }
-  };
+  onMount(() => {
+    window.Buffer = buffer.Buffer;
+    window.process = process;
+  });
+
+  // const connectWallet = async () => {
+  //   console.log("starting");
+
+  //   $selector = await setupWalletSelector({
+  //     network: "testnet",
+  //     modules: [setupNearWallet(), setupMyNearWallet()],
+  //   });
+  //   const modal = setupModal(selector, {
+  //     contractId: import.meta.env.VITE_CONTRACT,
+  //   });
+
+  //   console.log("trying");
+  //   modal.show();
+  // };
 
   $: {
-    console.log($metamask);
+    console.log($account);
   }
 </script>
 
@@ -37,21 +46,32 @@
   <div class="{toggleApp ? 'flex-1' : 'w-1/2'} bg-white flex flex-col h-full">
     <nav class="flex h-10 w-full px-8 items-end justify-between sticky">
       <img src="/trenchlogo.svg" width="32" height="32" alt="" />
-      {#if $metamask}
+      {#if $account}
         <button class="bg-blue-700 text-white rounded-md px-5"
-          >{$metamask.substring(0, 10)}...</button
+          >{$account.accountId}</button
         >
       {/if}
     </nav>
     <div class="w-full flex-1">
       <div class="h-full flex justify-center items-center">
-        {#if !$metamask}
+        {#if !$account}
           <button
-            on:click={connectWallet}
+            on:click={async () => {
+              await initContract();
+              // $wallet = await selector.wallet();
+            }}
             class="outline px-[15%] pb-4 outline-neutral-200 rounded-md flex flex-col justify-center items-center"
           >
-            <img src="/tron.webp" class="p-10" width="200" height="200" alt="" />
-            <p class="text-neutral-600 font-semibold">Connect via TronLink</p>
+            <img
+              src="/near_icon.png"
+              class="opacity-80"
+              width="200"
+              height="200"
+              alt=""
+            />
+            <p class="text-neutral-400 font-semibold">
+              Connect to Near Network
+            </p>
           </button>
         {:else if toggleApp}
           <Dashboard />
