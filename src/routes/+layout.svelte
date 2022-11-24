@@ -6,11 +6,11 @@
   import "../app.postcss";
   // import process from "process";
   import {initContract} from "$lib/js/caller"
-  import { onMount } from "svelte";
-
-  let toggleApp = true;
+  
   export const prerender = true
   export const ssr = false
+  let toggleApp = false;
+  
 
   // onMount(() => {
   //   window.Buffer = buffer.Buffer;
