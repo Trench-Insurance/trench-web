@@ -10,27 +10,39 @@ import {
 
 @NearBindgen({})
 class TInflationInsuranceDemo {
-  inflationRates = [1n, 1n, 1n, 1n, 1n, 1n, 1n, 1n, 1n, 1n, 1n, 1n];
+  inflationRates: Array<bigint> = [125n, 422n, 534n, 634n, 255n, 821n, 911n, 312n, 433n, 544n, 633n, 722n];
+  inflationToday: bigint = 146n;
   terms = new UnorderedMap<bigint>("map-terms");
   insuredValues = new UnorderedMap<bigint>("map-values");
   lockPeriods = new UnorderedMap<bigint>("map-locks");
 
   totalInsured: bigint = BigInt(0);
-  basepremium: bigint = 2n;
+  basepremium: bigint = 275n;
   timelock: bigint = BigInt(3600);
 
-  @call({privateFunction:true})
-  changeBasePremium(newpremium: bigint) {
-    this.basepremium = newpremium;
-  }
-
-  @call({privateFunction:true})
-  changeTimelock(newtimelock: bigint) {
-    this.timelock = newtimelock;
+  @call({})
+  changeBasePremium(newpremium: number) {
+    this.basepremium = BigInt(newpremium);
   }
 
   @call({})
-  claim(_amount: bigint) {
+  changeInflationRates(newRates: Array<number>) {
+    const arr = newRates.map((i) => BigInt(i))
+    this.inflationRates = arr;
+  }
+
+  @call({})
+  changeTimelock(newtimelock: number) {
+    this.timelock = BigInt(newtimelock);
+  }
+
+  @call({})
+  changeInflationToday(newInflation: number) {
+    this.inflationToday = BigInt(newInflation);
+  }
+
+  @call({})
+  claim({_amount}) {
     let caller = near.predecessorAccountId();
     let term = this.terms.get(caller, {
       defaultValue: BigInt(0),
@@ -42,18 +54,18 @@ class TInflationInsuranceDemo {
     let cooldown = this.lockPeriods.get(caller, {
       defaultValue: BigInt(0),
     });
-    
-    assert(cooldown! >= near.blockTimestamp(), "COOLDOWN");
+    assert(this.inflationToday > 400n, "Inflation is normal");
+    assert(cooldown! <= near.blockTimestamp(), "COOLDOWN");
     //only able to claim insurance based how much was insured
-    assert(insuredValueLeft! >= _amount, "EXCEED LIMITS");
+    assert(insuredValueLeft! >= BigInt(_amount), "EXCEED LIMITS");
     if (insuredValueLeft == BigInt(0)) {
       this.terms.set(caller, BigInt(0));
       this.lockPeriods.set(caller, BigInt(0));
     } else {
       assert(term! >= near.blockTimestamp(), "INSURANCE EXPIRED");
-      NearPromise.new(caller).transfer(_amount);
-      this.totalInsured -= _amount;
-      insuredValueLeft! -= _amount;
+      NearPromise.new(caller).transfer(BigInt(_amount));
+      this.totalInsured -= BigInt(_amount);
+      insuredValueLeft! -= BigInt(_amount);
       this.insuredValues.set(caller, insuredValueLeft!);
       //cooldown for 14 days every after claim process to prevent abuse
       this.lockPeriods.set(caller, cooldown! + this.timelock);
@@ -61,7 +73,7 @@ class TInflationInsuranceDemo {
   }
 
   @call({ payableFunction: true })
-  applyForInsurance(_value: bigint, _months: number) {
+  applyForInsurance({_value, _months}) {
     let caller = near.predecessorAccountId();
     let timestamp = near.blockTimestamp();
     let term = this.terms.get(caller, {
@@ -71,21 +83,22 @@ class TInflationInsuranceDemo {
     let cooldown = this.lockPeriods.get(caller, {
       defaultValue: BigInt(0),
     });
-    assert(cooldown! >= timestamp, "COOLDOWN");
+    assert(cooldown! == BigInt(0), "COOLDOWN");
 
-    let premium = this.calcPremium(_value, _months);
+    let premium = this.calcPremium({value: _value, month: _months});
     NearPromise.new(caller).transfer(premium);
 
-    this.totalInsured += _value;
+    this.totalInsured += BigInt(_value);
     this.terms.set(caller, (timestamp + BigInt(2592000)) * BigInt(_months));
-    this.insuredValues.set(caller, _value);
+    this.insuredValues.set(caller, BigInt(_value));
     this.lockPeriods.set(caller, timestamp);
   }
 
   @view({})
-  calcPremium(_value: bigint, _months: number) {
-    return _value *
-      (((this.inflationRates[_months - 1] + this.basepremium) * BigInt(_months)) / 100n);
+  calcPremium({value, month}) {
+    let res = value *
+    ((Number(this.inflationRates[month - 1])/100 + Number(this.basepremium) / 100) / 100 * month);
+    return BigInt(res);
   }
 
   @view({})
@@ -99,16 +112,24 @@ class TInflationInsuranceDemo {
   }
 
   @view({})
-  getInsuredAmount() {
-    let caller = near.predecessorAccountId();
+  getInflationToday() {
+    return this.inflationToday;
+  }
+
+  @view({})
+  getInflationRates() {
+    return this.inflationRates;
+  }
+
+  @view({})
+  getInsuredAmount({caller}) {
     return this.insuredValues.get(caller, {
       defaultValue: BigInt(0),
     });
   }
 
   @view({})
-  getCooldown() {
-    let caller = near.predecessorAccountId();
+  getCooldown({caller}) {
     return this.lockPeriods.get(caller, {
       defaultValue: BigInt(0),
     });

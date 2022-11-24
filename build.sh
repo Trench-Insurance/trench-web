@@ -2,4 +2,4 @@
 
 echo ">> Building contract"
 
-near-sdk-js build ./contracts/TInflationInsuranceDemo.ts buildcontract/TInflationInsuranceDemo.wasm
+near-sdk-js build ./contracts/TInflationInsuranceDemo.ts build/TInflationInsuranceDemo.wasm
