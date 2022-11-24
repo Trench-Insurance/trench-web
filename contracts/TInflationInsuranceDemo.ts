@@ -21,23 +21,23 @@ class TInflationInsuranceDemo {
   timelock: bigint = BigInt(3600);
 
   @call({})
-  changeBasePremium(newpremium: number) {
+  changeBasePremium({newpremium}) {
     this.basepremium = BigInt(newpremium);
   }
 
   @call({})
-  changeInflationRates(newRates: Array<number>) {
+  changeInflationRates({newRates}) {
     const arr = newRates.map((i) => BigInt(i))
     this.inflationRates = arr;
   }
 
   @call({})
-  changeTimelock(newtimelock: number) {
+  changeTimelock({newtimelock}) {
     this.timelock = BigInt(newtimelock);
   }
 
   @call({})
-  changeInflationToday(newInflation: number) {
+  changeInflationToday({newInflation}) {
     this.inflationToday = BigInt(newInflation);
   }
 
@@ -97,8 +97,8 @@ class TInflationInsuranceDemo {
   @view({})
   calcPremium({value, month}) {
     let res = value *
-    ((Number(this.inflationRates[month - 1])/100 + Number(this.basepremium) / 100) / 100 * month);
-    return BigInt(res);
+    (Number(this.inflationRates[month - 1])/100 + Number(this.basepremium) / 100) / 100 * month;
+    return BigInt(Math.trunc(res));
   }
 
   @view({})

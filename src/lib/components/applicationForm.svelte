@@ -5,6 +5,16 @@
   let iValue = 0;
   let month = 1;
   let basePremium = 175;
+  let applied = false;
+
+  const applyInsurance = async () => {
+    try {
+      await $contract.applyForInsurance({_value: iValue, _months: month});
+      applied = true;
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const getPredictions = async () => {
     const res = await fetch(
@@ -95,7 +105,7 @@
     <input bind:value={month} type="number" />
   </div>
   <div class="flex-grow" />
-  <button class="bg-blue-700 text-white rounded-md py-2">Apply Insurance</button>
+  <button on:click={applyInsurance} class="{applied ? "bg-green-600": "bg-blue-700"} text-white rounded-md py-2">{applied?"Applied" : "Apply Insurance"}</button>
 </div>
 
 <style>

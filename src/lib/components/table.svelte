@@ -3,9 +3,15 @@
   let month = 1;
   let value = 100;
   let premium;
+  let error;
 
   const getPremium = async () => {
-    premium = await $contract.calcPremium({ value: value, month: month });
+    try {
+      premium = await $contract.calcPremium({ value: value, month: month });
+      error = false;
+    } catch (err) {
+      error = err;
+    }
   };
 </script>
 
@@ -30,6 +36,13 @@
   <div class="gap-1 grid grid-cols-2 mt-4 border-t">
     <div class="py-2">
       <p>Premium: N {premium}</p>
+    </div>
+  </div>
+  {/if}
+  {#if error}
+  <div class="gap-1 grid grid-cols-2 mt-4 border-t">
+    <div class="py-2">
+      <p class="text-red-800">{error}</p>
     </div>
   </div>
   {/if}

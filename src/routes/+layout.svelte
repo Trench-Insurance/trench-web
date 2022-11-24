@@ -100,14 +100,7 @@
         />
       </button>
     {:else}
-      <nav
-        class="sticky gap-6 flex items-end text-neutral-500 justify-end px-8 h-10 w-full"
-      >
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/">How to</a>
-        <!-- <a href="/">Community</a> -->
-      </nav>
+     
       <div class="flex-1  h-full w-full">
         <div class="flex justify-center items-center h-full w-full">
           <div

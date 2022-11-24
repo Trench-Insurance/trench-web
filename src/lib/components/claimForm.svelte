@@ -3,13 +3,18 @@
   let value = 100;
   let tx;
   let inflation = 100;
+  let error;
 
   const getInflationRates = async () => {
     inflation = await $contract.getInflationToday();
   }
 
   const setInflationRate = async () => {
-    await $contract.changeInflationToday({newInflation: inflation})
+    try {
+      await $contract.changeInflationToday({newInflation: inflation})
+    } catch (err) {
+      error = err;
+    }
   }
 
   const claim = async () => {
@@ -51,6 +56,13 @@
     <div class="gap-1 grid grid-cols-2 mt-4 border-t">
       <div class="py-2">
         <p>{tx}</p>
+      </div>
+    </div>
+  {/if}
+  {#if error}
+    <div class="gap-1 grid grid-cols-2 mt-4 border-t">
+      <div class="py-2">
+        <p class="text-red-800">{error}</p>
       </div>
     </div>
   {/if}
