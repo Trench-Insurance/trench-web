@@ -2,15 +2,14 @@
   import Dashboard from "$lib/components/dashboard.svelte";
 
   // import * as buffer from "buffer";
-  import { wallet, selector, account } from "$lib/stores/walletStore";
+  import { account } from "$lib/stores/walletStore";
   import "../app.postcss";
   // import process from "process";
-  import {initContract} from "$lib/js/caller"
-  
-  export const prerender = true
-  export const ssr = false
+  import { initContract } from "$lib/js/caller";
+
+  // export const prerender = true
+  // export const ssr = false
   let toggleApp = false;
-  
 
   // onMount(() => {
   //   window.Buffer = buffer.Buffer;
@@ -31,10 +30,6 @@
   //   console.log("trying");
   //   modal.show();
   // };
-
-  $: {
-    console.log($account);
-  }
 </script>
 
 <button
@@ -100,7 +95,6 @@
         />
       </button>
     {:else}
-     
       <div class="flex-1  h-full w-full">
         <div class="flex justify-center items-center h-full w-full">
           <div
