@@ -1,35 +1,12 @@
 <script>
   import Dashboard from "$lib/components/dashboard.svelte";
 
-  // import * as buffer from "buffer";
   import { account } from "$lib/stores/walletStore";
   import "../app.postcss";
-  // import process from "process";
   import { initContract } from "$lib/js/caller";
 
-  // export const prerender = true
-  // export const ssr = false
   let toggleApp = false;
 
-  // onMount(() => {
-  //   window.Buffer = buffer.Buffer;
-  //   window.process = process;
-  // });
-
-  // const connectWallet = async () => {
-  //   console.log("starting");
-
-  //   $selector = await setupWalletSelector({
-  //     network: "testnet",
-  //     modules: [setupNearWallet(), setupMyNearWallet()],
-  //   });
-  //   const modal = setupModal(selector, {
-  //     contractId: import.meta.env.VITE_CONTRACT,
-  //   });
-
-  //   console.log("trying");
-  //   modal.show();
-  // };
 </script>
 
 <button
