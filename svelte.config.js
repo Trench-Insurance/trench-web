@@ -12,9 +12,7 @@ const config = {
     }),
   ],
   kit: {
-    adapter: adapter({
-      fallback: '/'
-    }),
+    adapter: adapter(),
   },
 };
 
