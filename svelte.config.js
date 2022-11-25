@@ -13,6 +13,7 @@ const config = {
   ],
   kit: {
     adapter: adapter({
+      strict: false,
       fallback: null
     }),
   },
