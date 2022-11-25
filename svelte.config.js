@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-netlify';
+import adapter from '@sveltejs/adapter-static';
 import preprocess from "svelte-preprocess";
 
 
@@ -12,7 +12,9 @@ const config = {
     }),
   ],
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      fallback: '/'
+    }),
   },
 };
 

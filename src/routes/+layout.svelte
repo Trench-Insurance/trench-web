@@ -4,7 +4,8 @@
   import { account } from "$lib/stores/walletStore";
   import "../app.postcss";
   import { initContract } from "$lib/js/caller";
-
+  export const prerender = true
+  export const ssr = false
   let toggleApp = false;
 
 </script>
